@@ -1,3 +1,13 @@
+#Requires -Version 7
+class PolicyTypes : System.Management.Automation.IValidateSetValuesGenerator
+{
+    [String[]] GetValidValues()
+    {
+        return @('Group', 'ServicePrincipal', 'Application')
+    }
+}
+
+
 function BuildScopes
 {
     <#
@@ -9,7 +19,7 @@ function BuildScopes
         [object]$TargetObject,
 
         [parameter(Mandatory = $true)]
-        [ValidateSet('Group', 'ServicePrincipal', 'Application')]
+        [ValidateSet([PolicyTypes])]
         [string]$PolicyType
     )
 
@@ -98,7 +108,7 @@ function ApplyPolicy
         [object]$PolicyTarget,
 
         [parameter(Mandatory = $true)]
-        [ValidateSet('Group', 'ServicePrincipal', 'Application')]
+        [ValidateSet([PolicyTypes])]
         [string]$PolicyType,
 
         [parameter(Mandatory = $true)]
@@ -391,7 +401,7 @@ function Set-AzureGovernancePolicy
         [String[]]$LogFilePath,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet('Group', 'ServicePrincipal', 'Application')]
+        [ValidateSet([PolicyTypes])]
         [string]$PolicyType
     )
 
@@ -544,6 +554,6 @@ function Set-AzureGovernancePolicy
     }
 
 }
-$spid = '50541732-c369-4b60-b0cb-340a2cd9a833' 
-$spid = '13fbfc35-8dab-48ed-bdb4-21f632e8ce67'
+$spid = '50541732-c369-4b60-b0cb-340a2cd9a833'
+#$spid = '13fbfc35-8dab-48ed-bdb4-21f632e8ce67'
 Set-AzureGovernancePolicy -Id $spid -PolicyType ServicePrincipal #  -Verbose
